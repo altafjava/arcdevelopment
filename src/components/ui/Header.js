@@ -132,7 +132,7 @@ export default function Header(props) {
         setValue(newValue)
     }
     const menuOptions = [{ name: "Services", link: "/services", activeIndex: 1, selectedIndex: 0 }, { name: 'Custom Software Development', link: '/customsoftware', activeIndex: 1, selectedIndex: 1 }, { name: 'Mobile App Development', link: '/mobileapps', activeIndex: 1, selectedIndex: 2 }, { name: 'Website Development', link: '/websites', activeIndex: 1, selectedIndex: 3 }]
-    const routes = [{ name: "Home", link: "/", activeIndex: 0 }, { name: "Services", link: "/services", activeIndex: 1 }, { name: "The Revolution", link: "/revolution", activeIndex: 2 }, { name: "About Us", link: "/about", activeIndex: 3 }, { name: "Contact Us", link: "/contact", activeIndex: 4 }, { name: "Free Estimate", link: "/estimate", activeIndex: 5 }]
+    const routes = [{ name: "Home", link: "/", activeIndex: 0 }, { name: "Services", link: "/services", activeIndex: 1, ariaOwns: anchorEl ? 'simple-menu' : undefined, ariaHaspopup: anchorEl ? true : undefined, mouseOver: event => handleClick(event) }, { name: "The Revolution", link: "/revolution", activeIndex: 2 }, { name: "About Us", link: "/about", activeIndex: 3 }, { name: "Contact Us", link: "/contact", activeIndex: 4 }, { name: "Free Estimate", link: "/estimate", activeIndex: 5 }]
     // useEffect() means componentWillMount()
     useEffect(() => {
         [...menuOptions, ...routes].forEach(route => {
@@ -153,11 +153,9 @@ export default function Header(props) {
     const tabs = (
         <React.Fragment>
             <Tabs value={value} onChange={handleChange} className={classes.tabContainer} indicatorColor='primary'>
-                <Tab className={classes.tab} component={Link} to='/' label='Home' />
-                <Tab className={classes.tab} component={Link} to='/services' label='Service' aria-controls='simple-menu' aria-haspopup='true' onMouseOver={handleClick} />
-                <Tab className={classes.tab} component={Link} to='/revolution' label='The Revolution' />
-                <Tab className={classes.tab} component={Link} to='about' label='About Us' />
-                <Tab className={classes.tab} component={Link} to='contact' label='Contact Us' />
+                {routes.map((route, i) => (
+                    <Tab key={i} className={classes.tab} component={Link} to={route.link} label={route.name} aria-owns={route.ariaOwns} aria-haspopup={route.ariaHaspopup} onMouseOver={route.mouseOver} />
+                ))}
             </Tabs>
             <Button variant='contained' color='secondary' className={classes.button}>Free Estimate</Button>
             <Menu id="simple-menu" anchorEl={anchorEl} keepMounted open={openMenu} onClose={handleClose} MenuListProps={{ onMouseLeave: handleClose }} classes={{ paper: classes.menu }} elevation={0}>
@@ -195,7 +193,6 @@ export default function Header(props) {
             </SwipeableDrawer>
             <IconButton className={classes.drawerIconContainer} onClick={() => setOpenDrawer(!openDrawer)} disableRipple >
                 <MenuIcon className={classes.drawerIcon}>
-
                 </MenuIcon>
             </IconButton>
         </React.Fragment>
