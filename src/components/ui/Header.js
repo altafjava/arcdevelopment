@@ -104,6 +104,9 @@ const useStyles = makeStyles(theme => ({
         '& .MuiListItemText-root': {
             opacity: 1
         }
+    },
+    appBar: {
+        zIndex: theme.zIndex.modal + 1
     }
 }))
 export default function Header(props) {
@@ -172,7 +175,8 @@ export default function Header(props) {
     const drawer = (
         <React.Fragment>
             <SwipeableDrawer classes={{ paper: classes.drawer }} disableBackdropTransition={!iOS} disableDiscovery={iOS} open={openDrawer} onClose={() => setOpenDrawer(false)} onOpen={() => setOpenDrawer(true)} >
-                <List disablePadding>
+                <div className={classes.toolbarMargin} />
+                <List disablePadding className={classes.appBar}>
                     {routes.map(route => (
                         < ListItem key={`${route}${route.activeIndex}`} onClick={() => { setOpenDrawer(false); setValue(route.activeIndex) }} divider button component={Link} to={route.link} selected={value === route.activeIndex} classes={{ selected: classes.drawerItemSelected }}>
                             <ListItemText className={classes.drawerItem} disableTypography>{route.name}</ListItemText>
@@ -192,7 +196,7 @@ export default function Header(props) {
     return (
         <React.Fragment>
             <ElevationScroll>
-                <AppBar position='fixed' color='primary'>
+                <AppBar position='fixed' color='primary' className={classes.appBar}>
                     <Toolbar disableGutters={true}>
                         <Button className={classes.logoContainer} component={Link} to='/' onClick={() => setValue(0)}>
                             <img alt='company logo' src={logo} className={classes.logo} />
