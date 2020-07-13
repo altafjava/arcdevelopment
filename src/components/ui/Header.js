@@ -101,7 +101,9 @@ const useStyles = makeStyles(theme => ({
         backgroundColor: theme.palette.common.orange
     },
     drawerItemSelected: {
-        opacity: 1
+        '& .MuiListItemText-root': {
+            opacity: 1
+        }
     }
 }))
 export default function Header(props) {
@@ -172,12 +174,12 @@ export default function Header(props) {
             <SwipeableDrawer classes={{ paper: classes.drawer }} disableBackdropTransition={!iOS} disableDiscovery={iOS} open={openDrawer} onClose={() => setOpenDrawer(false)} onOpen={() => setOpenDrawer(true)} >
                 <List disablePadding>
                     {routes.map(route => (
-                        <ListItem key={`${route}${route.activeIndex}`} onClick={() => { setOpenDrawer(false); setValue(route.activeIndex) }} divider button component={Link} to={route.link} selected={value === route.activeIndex}>
-                            <ListItemText className={value === route.activeIndex ? [classes.drawerItem, classes.drawerItemSelected] : classes.drawerItem} disableTypography>{route.name}</ListItemText>
+                        < ListItem key={`${route}${route.activeIndex}`} onClick={() => { setOpenDrawer(false); setValue(route.activeIndex) }} divider button component={Link} to={route.link} selected={value === route.activeIndex} classes={{ selected: classes.drawerItemSelected }}>
+                            <ListItemText className={classes.drawerItem} disableTypography>{route.name}</ListItemText>
                         </ListItem>
                     ))}
-                    <ListItem onClick={() => { setOpenDrawer(false); setValue(5) }} divider button component={Link} to='/estimate' selected={value === 5} className={classes.drawerItemEstimate}>
-                        <ListItemText className={value === 5 ? [classes.drawerItem, classes.drawerItemSelected] : classes.drawerItem} disableTypography>Free Estimate</ListItemText>
+                    <ListItem onClick={() => { setOpenDrawer(false); setValue(5) }} divider button component={Link} to='/estimate' selected={value === 5} classes={{ root: classes.drawerItemEstimate, selected: classes.drawerItemSelected }} >
+                        <ListItemText className={classes.drawerItem} disableTypography>Free Estimate</ListItemText>
                     </ListItem>
                 </List>
             </SwipeableDrawer>
@@ -185,7 +187,7 @@ export default function Header(props) {
                 <MenuIcon className={classes.drawerIcon}>
                 </MenuIcon>
             </IconButton>
-        </React.Fragment>
+        </React.Fragment >
     )
     return (
         <React.Fragment>
