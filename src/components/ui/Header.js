@@ -161,16 +161,15 @@ export default function Header(props) {
     }, [value, menuOptions, routes, selectedIndex])
     const tabs = (
         <React.Fragment>
-            {console.log('value=', value)}
             <Tabs value={value === undefined || value === 5 ? false : value} onChange={handleChange} className={classes.tabContainer} indicatorColor='primary'>
                 {routes.map((route, i) => (
                     <Tab key={i} className={classes.tab} component={Link} to={route.link} label={route.name} aria-owns={route.ariaOwns} aria-haspopup={route.ariaHaspopup} onMouseOver={route.mouseOver} />
                 ))}
             </Tabs>
             <Button variant='contained' color='secondary' className={classes.button} component={Link} to='/estimate' onClick={() => handleChange(5)}>Free Estimate</Button>
-            <Menu id="simple-menu" anchorEl={anchorEl} keepMounted open={openMenu} onClose={handleClose} MenuListProps={{ onMouseLeave: handleClose }} classes={{ paper: classes.menu }} elevation={0}>
+            <Menu id="simple-menu" anchorEl={anchorEl} keepMounted open={openMenu} onClose={handleClose} MenuListProps={{ onMouseLeave: handleClose }} classes={{ paper: classes.menu }} elevation={0} style={{ zIndex: 1302 }}>
                 {menuOptions.map((option, i) => (
-                    <MenuItem key={i} onClick={(event) => { handleMenuItemClick(event, i); setValue(1); handleClose() }} component={Link} to={option.link} className={classes.menuContainer} classes={{ root: classes.menuItem }} selected={i === selectedIndex && value === 1}>
+                    <MenuItem key={`${option}${i}`} onClick={(event) => { handleMenuItemClick(event, i); setValue(1); handleClose() }} component={Link} to={option.link} className={classes.menuContainer} classes={{ root: classes.menuItem }} selected={i === selectedIndex && value === 1}>
                         {option.name}
                     </MenuItem>
                 ))}
