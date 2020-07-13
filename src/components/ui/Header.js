@@ -139,16 +139,20 @@ export default function Header(props) {
     const menuOptions = [{ name: "Services", link: "/services", activeIndex: 1, selectedIndex: 0 }, { name: 'Custom Software Development', link: '/customsoftware', activeIndex: 1, selectedIndex: 1 }, { name: 'Mobile App Development', link: '/mobileapps', activeIndex: 1, selectedIndex: 2 }, { name: 'Website Development', link: '/websites', activeIndex: 1, selectedIndex: 3 }]
     const routes = [{ name: "Home", link: "/", activeIndex: 0 }, { name: "Services", link: "/services", activeIndex: 1, ariaOwns: anchorEl ? 'simple-menu' : undefined, ariaHaspopup: anchorEl ? true : undefined, mouseOver: event => handleClick(event) }, { name: "The Revolution", link: "/revolution", activeIndex: 2 }, { name: "About Us", link: "/about", activeIndex: 3 }, { name: "Contact Us", link: "/contact", activeIndex: 4 }]
     // useEffect() means componentWillMount()
+    //when browser refresh then check setValue to required tab
     useEffect(() => {
         [...menuOptions, ...routes].forEach(route => {
             switch (window.location.pathname) {
                 case `${route.link}`:
                     if (value !== route.activeIndex) {
                         setValue(route.activeIndex)
-                        if (route.selectedIndex && route.selectedIndex !== selectedIndex) {
+                        if (route.selectedIndex && route.selectedIndex !== selectedIndex)
                             setSelectedIndex(route.selectedIndex)
-                        }
                     }
+                    break;
+                case '/estimate':
+                    if (value !== 5)
+                        setValue(5)
                     break;
                 default:
                     break;
@@ -157,12 +161,13 @@ export default function Header(props) {
     }, [value, menuOptions, routes, selectedIndex])
     const tabs = (
         <React.Fragment>
-            <Tabs value={value} onChange={handleChange} className={classes.tabContainer} indicatorColor='primary'>
+            {console.log('value=', value)}
+            <Tabs value={value === undefined || value === 5 ? false : value} onChange={handleChange} className={classes.tabContainer} indicatorColor='primary'>
                 {routes.map((route, i) => (
                     <Tab key={i} className={classes.tab} component={Link} to={route.link} label={route.name} aria-owns={route.ariaOwns} aria-haspopup={route.ariaHaspopup} onMouseOver={route.mouseOver} />
                 ))}
             </Tabs>
-            <Button variant='contained' color='secondary' className={classes.button} component={Link} to='/estimate'>Free Estimate</Button>
+            <Button variant='contained' color='secondary' className={classes.button} component={Link} to='/estimate' onClick={() => handleChange(5)}>Free Estimate</Button>
             <Menu id="simple-menu" anchorEl={anchorEl} keepMounted open={openMenu} onClose={handleClose} MenuListProps={{ onMouseLeave: handleClose }} classes={{ paper: classes.menu }} elevation={0}>
                 {menuOptions.map((option, i) => (
                     <MenuItem key={i} onClick={(event) => { handleMenuItemClick(event, i); setValue(1); handleClose() }} component={Link} to={option.link} className={classes.menuContainer} classes={{ root: classes.menuItem }} selected={i === selectedIndex && value === 1}>
@@ -182,7 +187,7 @@ export default function Header(props) {
                             <ListItemText className={classes.drawerItem} disableTypography>{route.name}</ListItemText>
                         </ListItem>
                     ))}
-                    <ListItem onClick={() => { setOpenDrawer(false); setValue(5) }} divider button component={Link} to='/estimate' selected={value === 5} classes={{ root: classes.drawerItemEstimate, selected: classes.drawerItemSelected }} >
+                    <ListItem onClick={() => { setOpenDrawer(false); setValue(5) }} divider button component={Link} to='/estimate' selected={value === 5} classes={{ selected: classes.drawerItemSelected, root: classes.drawerItemEstimate }} >
                         <ListItemText className={classes.drawerItem} disableTypography>Free Estimate</ListItemText>
                     </ListItem>
                 </List>
