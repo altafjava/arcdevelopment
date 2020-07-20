@@ -113,11 +113,9 @@ export default function Header(props) {
     const classes = useStyles()
     const iOS = process.browser && /iPad|iPhone|iPod/.test(navigator.userAgent)
     const theme = useTheme()
-    const [value, setValue] = useState(0)
     const [openDrawer, setOpenDrawer] = useState(false)
     const [openMenu, setOpenMenu] = useState(false)
     const [anchorEl, setAnchorEl] = React.useState(null)
-    const [selectedIndex, setSelectedIndex] = useState(0)
     const matches = useMediaQuery(theme.breakpoints.down('md'))
 
     const handleClick = (event) => {
@@ -127,7 +125,7 @@ export default function Header(props) {
     const handleMenuItemClick = (e, i) => {
         setAnchorEl(null)
         setOpenMenu(false)
-        setSelectedIndex(i)
+        props.setSelectedIndex(i)
     }
     const handleClose = (e) => {
         setAnchorEl(null);
@@ -144,24 +142,24 @@ export default function Header(props) {
         [...menuOptions, ...routes].forEach(route => {
             switch (window.location.pathname) {
                 case `${route.link}`:
-                    if (value !== route.activeIndex) {
-                        setValue(route.activeIndex)
-                        if (route.selectedIndex && route.selectedIndex !== selectedIndex)
-                            setSelectedIndex(route.selectedIndex)
+                    if (props.value !== route.activeIndex) {
+                        props.setValue(route.activeIndex)
+                        if (route.selectedIndex && route.selectedIndex !== props.selectedIndex)
+                            props.setSelectedIndex(route.selectedIndex)
                     }
                     break;
                 case '/estimate':
-                    if (value !== 5)
-                        setValue(5)
+                    if (props.value !== 5)
+                        props.setValue(5)
                     break;
                 default:
                     break;
             }
         })
-    }, [value, menuOptions, routes, selectedIndex])
+    }, [props.value, menuOptions, routes, props.selectedIndex, props])
     const tabs = (
         <React.Fragment>
-            <Tabs value={value === undefined || value === 5 ? false : value} onChange={handleChange} className={classes.tabContainer} indicatorColor='primary'>
+            <Tabs value={props.value === undefined || props.value === 5 ? false : props.value} onChange={handleChange} className={classes.tabContainer} indicatorColor='primary'>
                 {routes.map((route, i) => (
                     <Tab key={i} className={classes.tab} component={Link} to={route.link} label={route.name} aria-owns={route.ariaOwns} aria-haspopup={route.ariaHaspopup} onMouseOver={route.mouseOver} />
                 ))}
@@ -169,7 +167,7 @@ export default function Header(props) {
             <Button variant='contained' color='secondary' className={classes.button} component={Link} to='/estimate' onClick={() => handleChange(5)}>Free Estimate</Button>
             <Menu id="simple-menu" anchorEl={anchorEl} keepMounted open={openMenu} onClose={handleClose} MenuListProps={{ onMouseLeave: handleClose }} classes={{ paper: classes.menu }} elevation={0} style={{ zIndex: 1302 }}>
                 {menuOptions.map((option, i) => (
-                    <MenuItem key={`${option}${i}`} onClick={(event) => { handleMenuItemClick(event, i); setValue(1); handleClose() }} component={Link} to={option.link} className={classes.menuContainer} classes={{ root: classes.menuItem }} selected={i === selectedIndex && value === 1}>
+                    <MenuItem key={`${option}${i}`} onClick={(event) => { handleMenuItemClick(event, i); props.setValue(1); handleClose() }} component={Link} to={option.link} className={classes.menuContainer} classes={{ root: classes.menuItem }} selected={i === props.selectedIndex && props.value === 1}>
                         {option.name}
                     </MenuItem>
                 ))}
@@ -182,11 +180,11 @@ export default function Header(props) {
                 <div className={classes.toolbarMargin} />
                 <List disablePadding className={classes.appBar}>
                     {routes.map(route => (
-                        < ListItem key={`${route}${route.activeIndex}`} onClick={() => { setOpenDrawer(false); setValue(route.activeIndex) }} divider button component={Link} to={route.link} selected={value === route.activeIndex} classes={{ selected: classes.drawerItemSelected }}>
+                        < ListItem key={`${route}${route.activeIndex}`} onClick={() => { setOpenDrawer(false); props.setValue(route.activeIndex) }} divider button component={Link} to={route.link} selected={props.value === route.activeIndex} classes={{ selected: classes.drawerItemSelected }}>
                             <ListItemText className={classes.drawerItem} disableTypography>{route.name}</ListItemText>
                         </ListItem>
                     ))}
-                    <ListItem onClick={() => { setOpenDrawer(false); setValue(5) }} divider button component={Link} to='/estimate' selected={value === 5} classes={{ selected: classes.drawerItemSelected, root: classes.drawerItemEstimate }} >
+                    <ListItem onClick={() => { setOpenDrawer(false); setValue(5) }} divider button component={Link} to='/estimate' selected={props.value === 5} classes={{ selected: classes.drawerItemSelected, root: classes.drawerItemEstimate }} >
                         <ListItemText className={classes.drawerItem} disableTypography>Free Estimate</ListItemText>
                     </ListItem>
                 </List>
