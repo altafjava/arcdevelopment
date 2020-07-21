@@ -184,7 +184,7 @@ export default function Header(props) {
                             <ListItemText className={classes.drawerItem} disableTypography>{route.name}</ListItemText>
                         </ListItem>
                     ))}
-                    <ListItem onClick={() => { setOpenDrawer(false); setValue(5) }} divider button component={Link} to='/estimate' selected={props.value === 5} classes={{ selected: classes.drawerItemSelected, root: classes.drawerItemEstimate }} >
+                    <ListItem onClick={() => { setOpenDrawer(false); props.setValue(5) }} divider button component={Link} to='/estimate' selected={props.value === 5} classes={{ selected: classes.drawerItemSelected, root: classes.drawerItemEstimate }} >
                         <ListItemText className={classes.drawerItem} disableTypography>Free Estimate</ListItemText>
                     </ListItem>
                 </List>
@@ -200,7 +200,7 @@ export default function Header(props) {
             <ElevationScroll>
                 <AppBar position='fixed' color='primary' className={classes.appBar}>
                     <Toolbar disableGutters={true}>
-                        <Button className={classes.logoContainer} component={Link} to='/' onClick={() => setValue(0)}>
+                        <Button className={classes.logoContainer} component={Link} to='/' onClick={() => props.setValue(0)}>
                             <img alt='company logo' src={logo} className={classes.logo} />
                         </Button>
                         {matches ? drawer : tabs}
